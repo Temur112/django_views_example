@@ -14,4 +14,4 @@
   - One-to-one relationship with user
 - How to run
   - clone repo -> create virtual environment -> activate venv -> navigate to core folder -> install requirements -> make and migrate migrations -> run server
-### Detailed process will be provided soon
+### Detailed to run process will be provided soon
