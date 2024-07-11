@@ -1,0 +1,20 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    Order detail / {{ block.super }}
+{% endblock %}
+{% block body %}
+    <h2> #{{ order.id }} order details</h2>
+    <p>Order address: {{ order.delivery_address }}</p>
+    <p>User: {{ order.user }}</p>
+    <p>Total: {{ order.total }}</p>
+    <p>Promo Code Used: {{ order.promo_code }}</p>
+    <h3>Products</h3>
+    <ol>
+        {% for item in order.products.all %}
+            <li>{{ item.name }} {{ item.price }}$</li>
+        {% endfor %}
+    </ol>
+    <a href="{% url "shop:updateOrder" pk=order.id %}">Update</a>
+    <a href="{% url "shop:ordersArchive" pk=order.id %}">Delete</a>
+    <a href="{% url "shop:orders" %}">Go back</a>
+{% endblock %}

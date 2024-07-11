@@ -1,0 +1,21 @@
+{% extends "shop/base.html" %}
+
+{% block title %}
+    products list /
+    {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    <h2>Products list</h2>
+    <div class="products">
+        {% for product in products %}
+            <div class="products__item">
+                <p>Product name: <a href="{% url "shop:productDetails" pk=product.pk %}">{{ product.name }}</a></p>
+                <p>Product price: {{ product.price }} $</p>
+                <p>Product discount: {{ product.discount }}</p>
+            </div>
+            <br>
+        {% endfor %}
+    </div>
+    <a href="{% url 'shop:createProduct' %}">Create product</a>
+{% endblock %}

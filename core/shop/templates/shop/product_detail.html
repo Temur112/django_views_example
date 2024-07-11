@@ -1,0 +1,18 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    product detail /
+    {{ block.super }}
+{% endblock %}
+{% block body %}
+    <h2>{{ product.name }} details</h2>
+    <p>price: {{ product.price }}</p>
+    <p>description: {% firstof product.description "No description so far" %} </p>
+    <p> discount: {{ product.discount }}</p>
+    <p> is sold: {{ product.archived }}</p>
+    <br>
+    <p><a href="{% url "shop:productUpdate" pk=product.pk %}">update</a></p>
+    <br>
+    <p><a href="{% url "shop:productArchive" pk=product.pk %}">Archive product</a></p>
+    <br>
+    <a href="{% url "shop:products" %}">Go back</a>
+{% endblock %}

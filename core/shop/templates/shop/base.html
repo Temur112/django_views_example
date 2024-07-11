@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            shop
+        {% endblock %}
+    </title>
+</head>
+<body>
+    {% block header %}
+        <a href="{% url "shop:orders" %}">Orders list</a>
+    {% endblock %}
+    {% block body %}
+        <h1>Base html page</h1>
+        <p><a href="{% url "shop:products" %}">Products List</a></p>
+        <br>
+
+    {% endblock %}
+
+</body>
+</html>

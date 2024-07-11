@@ -15,13 +15,18 @@ class Product(models.Model):
     archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Order(models.Model):
+    delivery_address = models.CharField(max_length=100, blank=False, null=False)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     products = models.ManyToManyField(Product, related_name='products')
-    _total = models.DecimalField(max_digits=50, decimal_places=2)
+    _total = models.DecimalField(max_digits=50, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     promo_code = models.CharField(max_length=20, blank=True, null=False)
+    archived = models.BooleanField(default=False)
 
     @property
     def total(self):

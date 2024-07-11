@@ -1,0 +1,13 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    create product /
+    {{ block.super }}
+{% endblock %}
+{% block body %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <a href="{% url "shop:products" %}">Go back</a>
+{% endblock %}

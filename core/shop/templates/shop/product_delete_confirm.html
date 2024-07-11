@@ -1,0 +1,15 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    delete /
+    {{ block.super }}
+{% endblock %}
+{% block body %}
+    <h2>Are sure want archive {{ object.name }}</h2>
+    <br>
+    <a href="{% url 'shop:productDetails' pk=object.pk %}">Go back</a>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Archive</button>
+    </form>
+{% endblock %}

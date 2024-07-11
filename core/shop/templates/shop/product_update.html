@@ -1,0 +1,15 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    hello mf /
+    {{ block.super }}
+{% endblock %}
+{% block body %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+
+    <br>
+    <a href="{% url "shop:productDetails" pk=object.id %}">Cancel</a>
+{% endblock %}

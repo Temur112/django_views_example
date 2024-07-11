@@ -1,0 +1,13 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    orders list / {{ block.super }}
+{% endblock %}
+{% block body %}
+    {% for order in orders %}
+        <a href="{% url "shop:ordersDetails" pk=order.pk %}"><p>Order id {{ order.id }}</p></a>
+        <p>{{ order.user }}</p>
+        <p>{{ order.delivery_address }}</p>
+        <br>
+    {% endfor %}
+     <a href="{% url "shop:createOrder" %}">Create order</a>
+{% endblock %}
