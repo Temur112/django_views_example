@@ -22,7 +22,7 @@ class Product(models.Model):
 class Order(models.Model):
     delivery_address = models.CharField(max_length=100, blank=False, null=False)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    products = models.ManyToManyField(Product, related_name='products')
+    products = models.ManyToManyField(Product, related_name="products")
     _total = models.DecimalField(max_digits=50, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     promo_code = models.CharField(max_length=20, blank=True, null=False)
@@ -34,8 +34,8 @@ class Order(models.Model):
 
 
 def update_order_totals(sender, instance, action, **kwargs):
-    if action in ['post_add', 'post_remove', 'post_clear']:
-        instance._total += instance.products.aggregate(total = Sum('price'))['total']
+    if action in ["post_add", "post_remove", "post_clear"]:
+        instance._total += instance.products.aggregate(total=Sum("price"))["total"]
         instance.save()
 
 
