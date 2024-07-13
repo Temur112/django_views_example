@@ -1,0 +1,11 @@
+{% extends "my_auth/base.html" %}
+{% block  title %}
+    Create user
+{% endblock %}
+{% block body %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create</button>
+    </form>
+{% endblock %}

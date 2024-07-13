@@ -10,7 +10,9 @@
     <p> discount: {{ product.discount }}</p>
     <p> is sold: {{ product.archived }}</p>
     <br>
+    {% if has_permission %}
     <p><a href="{% url "shop:productUpdate" pk=product.pk %}">update</a></p>
+    {% endif %}
     <br>
     <p><a href="{% url "shop:productArchive" pk=product.pk %}">Archive product</a></p>
     <br>

@@ -17,5 +17,7 @@
             <br>
         {% endfor %}
     </div>
-    <a href="{% url 'shop:createProduct' %}">Create product</a>
+    {% if perms.shop.add_product %}
+        <a href="{% url 'shop:createProduct' %}">Create product</a>
+    {% endif %}
 {% endblock %}

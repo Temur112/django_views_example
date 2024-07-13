@@ -8,7 +8,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from .models import Product, Order
 
 
@@ -23,11 +23,19 @@ class ProductListView(ListView):
     queryset = Product.objects.filter(archived=False)
 
 
-class CreateProductView(CreateView):
+class CreateProductView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = "shop.add_product"
+    login_url = "/accounts/login/"
+
+    permission_denied_message = "You do not have enough privileges to create a new product."
     model = Product
     template_name = "shop/create_product.html"
     fields = ["name", "price", "description", "discount"]
     success_url = reverse_lazy("shop:products")
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
 
 
 class ProductDetailView(DetailView):
@@ -43,8 +51,16 @@ class ProductDetailView(DetailView):
             )
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        my_object = self.get_object()
+        user = self.request.user
 
-class UpdateProductView(UpdateView):
+        context["has_permission"] = user.has_perms(["shop.change_product",]) or user.is_superuser or my_object.created_by == user
+        return context
+
+
+class UpdateProductView(UserPassesTestMixin, UpdateView):
     model = Product
     # context_object_name = 'product'
     template_name_suffix = "_update"
@@ -52,6 +68,11 @@ class UpdateProductView(UpdateView):
 
     def get_success_url(self):
         return reverse("shop:productDetails", kwargs={"pk": self.object.pk})
+
+    def test_func(self):
+        user = self.request.user
+        my_object = self.get_object()
+        return user.has_perms(["shop.change_product",]) or user.is_superuser or my_object.created_by == user
 
 
 class DeleteProductView(DeleteView):
