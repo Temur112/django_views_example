@@ -4,20 +4,42 @@ from django.db.models import Sum
 from django.db.models.signals import m2m_changed
 
 
-# Create your models here.
+def create_preview_path(instance, filename):
+    return "products/product_{pk}/preview/{filename}".format(
+        pk=instance.pk,
+        filename=filename,
+    )
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=100, blank=False)
-    description = models.TextField(blank=True, null=False)
+    '''model for create product'''
+    name = models.CharField(max_length=100, blank=False, db_index=True)
+    description = models.TextField(blank=True, null=False, db_index=True)
     price = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    preview = models.ImageField(null=True, blank=True, upload_to=create_preview_path)
 
     def __str__(self):
         return self.name
+
+
+def product_image_path(instance, filename):
+    return "products/product_{pk}/images/{filename}".format(
+        pk=instance.pk,
+        filename=filename,
+    )
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_images")
+    image = models.ImageField(upload_to=product_image_path)
+    description = models.TextField(blank=True, null=False)
+
+    def __str__(self):
+        return self.product.name
 
 
 class Order(models.Model):
@@ -28,6 +50,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     promo_code = models.CharField(max_length=20, blank=True, null=False)
     archived = models.BooleanField(default=False)
+    receipt = models.FileField(null=True, upload_to="orders/receipts")
 
     @property
     def total(self):

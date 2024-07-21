@@ -1,13 +1,11 @@
-{% extends "shop/base.html" %}
+{% extends "my_auth/base.html" %}
 {% block title %}
-    create product /
-    {{ block.super }}
+    Update user profile
 {% endblock %}
 {% block body %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Submit</button>
+        <button type="submit">Update</button>
     </form>
-    <a href="{% url "shop:products" %}">Go back</a>
 {% endblock %}

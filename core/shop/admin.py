@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, Product
+from .models import Order, Product, ProductImage
 
 
 class ProductInline(admin.TabularInline):
@@ -17,7 +17,7 @@ class OrderAdmin(admin.ModelAdmin):
         (
             "Order options",
             {
-                "fields": ("id", "user", "promo_code", "archived"),
+                "fields": ("id", "user", "promo_code", "archived", 'receipt'),
             },
         )
     ]
@@ -32,10 +32,25 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(Order, OrderAdmin)
 
 
+class ProductImageInline(admin.StackedInline):
+    model = ProductImage
+    extra = 1
+
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "short_description", "price", "archived")
     list_display_links = ("id", "name")
     list_filter = ("archived",)
+    inlines = [ProductImageInline]
+
+    fieldsets = [
+        ("Product information", {
+            "fields": ("name", "description", "price"),
+        }),
+        ("Images", {
+            "fields": ("preview", ),
+        }),
+    ]
 
     def short_description(self, obj):
         if len(obj.description) < 40:

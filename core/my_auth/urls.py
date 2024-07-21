@@ -14,6 +14,7 @@ urlpatterns = [
     path('getSession/', views.get_session_view, name='getSession'),
     path('logout/', views.logout_view, name='logout'),
     # path('logout/', views.MyLogoutView.as_view(), name='logout'),
-    path('about', views.AboutMeView.as_view(), name='aboutMe'),
+    path('about/', views.AboutMeView.as_view(), name='aboutMe'),
     path('createUser/', views.CreateUserView.as_view(), name='createUser'),
+    path('update/<int:pk>', views.UpdateUserProfileView.as_view(), name='updateUser'),
 ]

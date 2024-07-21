@@ -4,8 +4,9 @@ from django.contrib.auth.views import LogoutView
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView
 from .models import UserProfile
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 # Create your views here.
@@ -59,4 +60,17 @@ class CreateUserView(CreateView):
         )
         login(request=self.request, user=user)
         return response
+
+
+class UpdateUserProfileView(UserPassesTestMixin, UpdateView):
+    template_name = 'my_auth/update_user_profile.html'
+    success_url = reverse_lazy("my_auth:aboutMe")
+    model = UserProfile
+    fields = ["bio", "avatar", "agreement_accepted"]
+
+    def test_func(self):
+        user = self.request.user
+        my_object = self.get_object()
+        return user.userprofile.pk == my_object.pk or user.is_superuser or user.is_staff
+
 

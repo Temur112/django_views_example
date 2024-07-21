@@ -9,6 +9,16 @@
     <p>description: {% firstof product.description "No description so far" %} </p>
     <p> discount: {{ product.discount }}</p>
     <p> is sold: {{ product.archived }}</p>
+    {% if product.preview %}
+        <h3>product preview</h3>
+        <img src="{{ product.preview.url }}" alt="{{ product.preview.name }}">
+    {% endif %}
+    <h3>Images</h3>
+    {% for img in product.product_images.all %}
+        <img src="{{ img.image.url }} " alt="{{ img.image.name }}">
+        {% empty %}
+        No images available
+    {% endfor %}
     <br>
     {% if has_permission %}
     <p><a href="{% url "shop:productUpdate" pk=product.pk %}">update</a></p>
